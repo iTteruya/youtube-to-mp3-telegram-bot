@@ -29,10 +29,12 @@ def get_info(yt_link):
     try:
         yt = YouTube(yt_link)
     except exceptions.RegexMatchError:
-        return False
+        err_msg = "Please send a YT link :-)"
+        return False, err_msg
 
     if not validate_link(yt):
-        return False
+        err_msg = "Video unavailable 😕"
+        return False, err_msg
     else:
         yt_streams = yt.streams
         yt_title = yt.title
@@ -47,7 +49,8 @@ def get_info(yt_link):
 if __name__ == '__main__':
     # Crating the bot with the token given by @BotFather
     bot = telebot.TeleBot(config.TOKEN)
-
+    # For displaying the appropriate error
+    error_msg = None
 
     @bot.message_handler(commands=['start'])
     def welcome(message):
@@ -66,9 +69,14 @@ if __name__ == '__main__':
 
         # Validating url
         if not audio_info[0]:
-            bot.send_message(chat_id, "Something wrong, I can feel it")
+            bot.send_message(chat_id, audio_info[1])
         else:
-            bot.send_audio(chat_id, "Let's go!")
+            try:
+                bot.send_audio(chat_id, "Let's go!")
+            except telebot.apihelper.ApiTelegramException:
+                bot.send_message(chat_id, "Audio of such size cannot be sent through telegram 🤓")
+            except Exception:
+                bot.send_message(chat_id, "Something went wrong 🤔")
 
 # Launch
 bot.polling(none_stop=True)
