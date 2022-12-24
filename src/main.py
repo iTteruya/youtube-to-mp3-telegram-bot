@@ -49,14 +49,30 @@ def get_info(yt_link):
 if __name__ == '__main__':
     # Crating the bot with the token given by @BotFather
     bot = telebot.TeleBot(config.TOKEN)
+
+    # For multiuser support, chats will contain chat ids, as well as current audio info
+    chats = {}
     # For displaying the appropriate error
     error_msg = None
 
+
+    # Handling /start command
     @bot.message_handler(commands=['start'])
     def welcome(message):
-        chat_id = message.chat.id
+        chat_id = message.chat.id  # Get chat id
 
-        bot.send_message(chat_id, "Hi")
+        yt_audio = YTAudio()
+        chats[chat_id] = yt_audio
+        # Welcome message
+        bot.send_message(chat_id,
+                         "Welcome, {0.first_name}!\n"
+                         "I am a bot for converting YouTube videos to downloadable audio."
+                         "\n\nPlease send a link to a YT video to start :-)"""
+                         "\n\n<b>Available commands:</b>"
+                         "\n/start - initialize the bot"
+                         "\n/help - to see available commands"
+                         "\n/info - to get info about the last video".format(message.from_user, bot.get_me()),
+                         parse_mode='html')
 
 
     # Handling incoming messages
