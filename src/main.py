@@ -1,6 +1,7 @@
 import telebot
 import config
 from pytube import YouTube, exceptions
+from io import BytesIO
 
 
 # Class containing info about YouTube video
@@ -55,6 +56,7 @@ if __name__ == '__main__':
     # For displaying the appropriate error
     error_msg = None
 
+
     # Handling /start command
     @bot.message_handler(commands=['start'])
     def welcome(message):
@@ -73,6 +75,7 @@ if __name__ == '__main__':
                          "\n/info - to get info about the last video".format(message.from_user, bot.get_me()),
                          parse_mode='html')
 
+
     # Handling /help command
     @bot.message_handler(commands=['help'])
     def command_help(message):
@@ -83,6 +86,7 @@ if __name__ == '__main__':
                                   "\n/help - to see available commands"
                                   "\n/info - to get info about the last video",
                          parse_mode='html')
+
 
     # Handling /info command
     @bot.message_handler(commands=['info'])
@@ -105,6 +109,7 @@ if __name__ == '__main__':
                                                                 chats[chat_id].description),
                              parse_mode='html')
 
+
     # Handling incoming messages
     @bot.message_handler(content_types=['text'])
     def get_text_messages(message):
@@ -124,6 +129,7 @@ if __name__ == '__main__':
                     bot.send_message(chat_id, audio_info[1])
                 else:
                     try:
+                        msg = bot.send_message(chat_id, "Please wait⌛ ⌛ ⌛ ")
                         cur_chat.streams = audio_info[0]
                         cur_chat.title = audio_info[1]
                         cur_chat.author = audio_info[2]
@@ -132,7 +138,16 @@ if __name__ == '__main__':
                         cur_chat.views = audio_info[5]
                         cur_chat.thumbnail = audio_info[6]
 
-                        bot.send_message(chat_id, "Let's go!")
+                        # Getting the audio
+                        audio_stream = cur_chat.streams.filter(only_audio=True).first()
+                        buffer = BytesIO()
+                        audio_stream.stream_to_buffer(buffer)
+                        buffer.seek(0)
+
+                        bot.delete_message(chat_id, msg.message_id)
+
+                        # Sending the audio
+                        bot.send_audio(chat_id, buffer)
                     except telebot.apihelper.ApiTelegramException:
                         bot.send_message(chat_id, "Audio of such size cannot be sent through telegram 🤓")
                     except Exception:
