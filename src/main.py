@@ -84,24 +84,59 @@ if __name__ == '__main__':
                                   "\n/info - to get info about the last video",
                          parse_mode='html')
 
+    # Handling /info command
+    @bot.message_handler(commands=['info'])
+    def command_info(message):
+        chat_id = message.chat.id  # Get chat id
+
+        if chat_id not in chats.keys() or chats[chat_id].streams is None:
+            bot.send_message(chat_id, "Please send a link first")
+        else:
+            # Sending info about video
+            bot.send_message(chat_id,
+                             "<b>Title:</b> {0}\n"
+                             "<b>Uploader:</b> {1}\n"
+                             "<b>Duration:</b> {2} seconds\n"
+                             "<b>Views:</b> {3} views\n"
+                             "<b>Description:</b> {4}\n".format(chats[chat_id].title,
+                                                                chats[chat_id].author,
+                                                                chats[chat_id].duration,
+                                                                chats[chat_id].views,
+                                                                chats[chat_id].description),
+                             parse_mode='html')
+
     # Handling incoming messages
     @bot.message_handler(content_types=['text'])
     def get_text_messages(message):
-        chat_id = message.chat.id
+        chat_id = message.chat.id  # Get chat id
 
-        link = message.text  # Get user text (should be a yt url)
-        audio_info = get_info(link)
+        if message.chat.type == "private":
 
-        # Validating url
-        if not audio_info[0]:
-            bot.send_message(chat_id, audio_info[1])
-        else:
-            try:
-                bot.send_audio(chat_id, "Let's go!")
-            except telebot.apihelper.ApiTelegramException:
-                bot.send_message(chat_id, "Audio of such size cannot be sent through telegram 🤓")
-            except Exception:
-                bot.send_message(chat_id, "Something went wrong 🤔")
+            if chat_id not in chats.keys():
+                bot.send_message(message.chat.id, "Please initialize chat with /start")
+            else:
+                cur_chat = chats[chat_id]
+                link = message.text  # Get user text (should be a yt url)
+                audio_info = get_info(link)
+
+                # Validating url
+                if not audio_info[0]:
+                    bot.send_message(chat_id, audio_info[1])
+                else:
+                    try:
+                        cur_chat.streams = audio_info[0]
+                        cur_chat.title = audio_info[1]
+                        cur_chat.author = audio_info[2]
+                        cur_chat.description = audio_info[3]
+                        cur_chat.duration = audio_info[4]
+                        cur_chat.views = audio_info[5]
+                        cur_chat.thumbnail = audio_info[6]
+
+                        bot.send_message(chat_id, "Let's go!")
+                    except telebot.apihelper.ApiTelegramException:
+                        bot.send_message(chat_id, "Audio of such size cannot be sent through telegram 🤓")
+                    except Exception:
+                        bot.send_message(chat_id, "Something went wrong 🤔")
 
 # Launch
 bot.polling(none_stop=True)
