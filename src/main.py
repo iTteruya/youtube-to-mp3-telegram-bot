@@ -147,7 +147,8 @@ if __name__ == '__main__':
                         bot.delete_message(chat_id, msg.message_id)
 
                         # Sending the audio
-                        bot.send_audio(chat_id, buffer)
+                        bot.send_audio(chat_id, buffer, duration=cur_chat.duration,
+                                       title=cur_chat.title, performer=cur_chat.author, thumb=cur_chat.thumbnail)
                     except telebot.apihelper.ApiTelegramException:
                         bot.send_message(chat_id, "Audio of such size cannot be sent through telegram 🤓")
                     except Exception:
