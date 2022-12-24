@@ -55,7 +55,6 @@ if __name__ == '__main__':
     # For displaying the appropriate error
     error_msg = None
 
-
     # Handling /start command
     @bot.message_handler(commands=['start'])
     def welcome(message):
@@ -74,6 +73,16 @@ if __name__ == '__main__':
                          "\n/info - to get info about the last video".format(message.from_user, bot.get_me()),
                          parse_mode='html')
 
+    # Handling /help command
+    @bot.message_handler(commands=['help'])
+    def command_help(message):
+        chat_id = message.chat.id  # Get chat id
+        # Help message
+        bot.send_message(chat_id, "<b>Available commands:</b>"
+                                  "\n/start - initialize the bot"
+                                  "\n/help - to see available commands"
+                                  "\n/info - to get info about the last video",
+                         parse_mode='html')
 
     # Handling incoming messages
     @bot.message_handler(content_types=['text'])
