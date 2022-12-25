@@ -1,5 +1,5 @@
 import telebot
-import config
+from src import config
 from pytube import YouTube, exceptions
 from io import BytesIO
 
@@ -154,5 +154,5 @@ if __name__ == '__main__':
                     except Exception:
                         bot.send_message(chat_id, "Something went wrong 🤔")
 
-# Launch
-bot.polling(none_stop=True)
+    # Launch
+    bot.polling(none_stop=True)
