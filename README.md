@@ -1,4 +1,7 @@
 # YouTube to .mp3 Converter Telegram Bot
+| develop                                                                                                                            | main                                                                                                                       |
+|------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| ![`develop` tests](https://github.com/iTteruya/youtube-to-mp3-telegram-bot/actions/workflows/test.yml/badge.svg?branch=develop) | ![`main` tests](https://github.com/iTteruya/youtube-to-mp3-telegram-bot/actions/workflows/test.yml/badge.svg?branch=main) |
 ## Description
 A bot for converting YouTube videos to mp3 audio
 
