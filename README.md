@@ -8,12 +8,19 @@ This bot receives a link to a YouTube video, converts it to an audio format and 
 Possible inputs are:
 
 - `/start` — let the bot greet you and bein the work:
+
   ![](img/greeting.png)
+
 - `/help` — see available commands:
+
   ![](img/help.png)
+
 - send a link to YouTube video - bot should get you your audio:
+
   ![](img/ex.png)
+
 - `/info` — should get you the information about the video you last sent:
+
   ![](img/info.png)
 
 Any other input will be regarded as incorrect :-).
