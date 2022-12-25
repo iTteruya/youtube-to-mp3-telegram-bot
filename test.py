@@ -1,7 +1,7 @@
 import src.main as main
 from pytube import YouTube
 
-test_url1 = 'https://www.youtube.com/watch?v=NMA_isZYsYQ'  # Video not available in this country
+test_url1 = 'https://yandex.ru/video/preview/15983717573336007123'  # Video not available in this country
 test_url2 = 'you.tube.com/watch?v=NMA_i'  # Not a link
 test_url3 = 'https://www.youtube.com/watch?v=NMRhx71bGo4&list=PL8eonCDjyJ7EpHQ8IFYjIAikxkOeAMGKJ&index=1409'
 
@@ -18,11 +18,11 @@ def test_validate_url():
 
 
 def test_get_info_1():
-    answer1 = (False, 'Please send a YT link :-)')
-    answer2 = (False, 'Video unavailable 😕')
+    answer1 = (False, 'Video unavailable 😕')
+    answer2 = (False, 'Please send a YT link :-)')
 
-    assert main.get_info(test_url2) == answer1
-    assert main.get_info(test_url1) == answer2
+    assert main.get_info(test_url1) == answer1
+    assert main.get_info(test_url2) == answer2
 
 
 def test_get_info_2():
