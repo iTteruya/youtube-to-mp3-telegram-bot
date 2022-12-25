@@ -1,5 +1,5 @@
 import telebot
-import config
+from src import config
 from pytube import YouTube, exceptions
 from io import BytesIO
 
